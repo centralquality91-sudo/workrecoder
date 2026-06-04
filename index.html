@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Registry System</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <style>
+        :root { --primary: #0f4c81; --bg-body: #f4f7f9; }
+        body { font-family: sans-serif; background: var(--bg-body); padding: 20px; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { padding: 10px 20px; cursor: pointer; border: 1px solid #ddd; background: #eee; border-radius: 5px; }
+        .tab-btn.active { background: var(--primary); color: white; }
+        .page { display: none; }
+        .page.active { display: block; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        .img-preview { max-width: 100px; display: block; }
+        .modal { display: none; position: fixed; top:0; left:0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 20px; border-radius: 8px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Register System</h1>
+        <button onclick="openQrModal()">📱 Generate QR Link</button>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" id="btn-entry" onclick="switchTab('entry')">1. Registration Entry</button>
+        <button class="tab-btn" id="btn-output" onclick="switchTab('output')">2. Master Dashboard</button>
+    </div>
+
+    <div id="page-entry" class="page active">
+        <input type="text" id="regId" placeholder="Enter ID/Job No">
+        <button onclick="createRecord()">Load / Create</button>
+        <div id="workspace" style="margin-top:20px;">
+            <table>
+                <tr><th>Detail</th><th>Photo</th><th>Remark</th></tr>
+                <tr>
+                    <td contenteditable="true" id="cellDetail"></td>
+                    <td>
+                        <button onclick="openCamera()">📷 Camera</button>
+                        <div id="imgContainer"></div>
+                    </td>
+                    <td contenteditable="true" id="cellRemark"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div id="page-output" class="page">
+        <h3>Dashboard</h3>
+        <p>This is where your master list will appear.</p>
+    </div>
+</div>
+
+<div id="qrModal" class="modal"><div class="modal-content">
+    <div id="qrcode"></div>
+    <button onclick="document.getElementById('qrModal').style.display='none'">Close</button>
+</div></div>
+
+<script>
+    function switchTab(tab) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('page-' + tab).classList.add('active');
+        document.getElementById('btn-' + tab).classList.add('active');
+    }
+
+    function openQrModal() {
+        document.getElementById('qrModal').style.display = 'flex';
+        document.getElementById('qrcode').innerHTML = "";
+        new QRCode(document.getElementById('qrcode'), window.location.href);
+    }
+
+    function createRecord() {
+        alert("Record Loaded for: " + document.getElementById('regId').value);
+    }
+</script>
+</body>
+</html>
